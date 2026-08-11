@@ -188,6 +188,23 @@
       "showNumberDelay": 300,
       "shown": 10,
       "useNerdFont": false
+    },
+    "layouts": {
+      "leftLayout": [
+        "leftSidebarButton",
+        "docktoPanel",
+        "workspaces",
+        "activeWindow"
+      ],
+      "middleLayout": [
+        "clockWidget"
+      ],
+      "rightLayout": [
+        "systemIcons",
+        "utilButtons",
+        "sysTray",
+        "powerButton"
+      ]
     }
   },
   "battery": {
