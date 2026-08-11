@@ -15,6 +15,35 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${REPO_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 DEPS_DATA_FILE="$SCRIPT_DIR/feddeps.toml"
 
+# ── Architecture detection ────────────────────────────────────────────────────
+# The local RPM repo (end-4/ii-package-builds, packages-fedora release) only
+# publishes x86_64 builds. On aarch64 (e.g. Asahi Linux on Apple Silicon) we
+# skip it and install matugen from source via install-matugen-aarch64.sh.
+MACHINE_ARCH="$(uname -m)"
+IS_AARCH64=false
+if [[ "$MACHINE_ARCH" == "aarch64" || "$MACHINE_ARCH" == "arm64" ]]; then
+    IS_AARCH64=true
+fi
+
+# Packages that belong to the Hyprland compositor ecosystem and are either
+# unused on KDE Plasma or superseded by KDE-native equivalents. Skipped only
+# on aarch64 so the x86_64 install path stays unchanged.
+# - hyprland / hyprland-guiutils / hyprland-qt-support: Hyprland stack, not run on KDE
+# - hyprsunset: superseded by KWin Night Light DBus bridge (services/Hyprsunset.qml)
+# - hypridle: KDE ships its own idle daemon
+# - hyprshot / slurp: KDE build uses spectacle + ImageMagick (ScreenshotAction.qml)
+# - grub2-breeze-theme: Asahi Linux boots via U-Boot, no GRUB
+AARCH64_SKIP_PKGS=(
+    "hyprland"
+    "hyprland-guiutils"
+    "hyprland-qt-support"
+    "hyprsunset"
+    "hypridle"
+    "hyprshot"
+    "slurp"
+    "grub2-breeze-theme"
+)
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 log()  { echo; echo "==> $*"; }
 warn() { echo -e "\033[0;31m[WARN] $*\033[0m" >&2; }
@@ -22,6 +51,10 @@ err()  { echo -e "\033[0;31m[ERR]  $*\033[0m" >&2; }
 
 # Init local RPM repo and download rpms from releases there.
 init_local_repo() {
+    if [[ "$IS_AARCH64" == true ]]; then
+        log "Skipping local RPM repo — aarch64: ii-package-builds only ships x86_64 RPMs."
+        return 0
+    fi
     local url="https://api.github.com/repos/end-4/ii-package-builds/releases/tags/packages-fedora"
     local path="$HOME/.cache/illogical-impulse-repo"
 
@@ -89,7 +122,27 @@ main() {
         package_list=$(echo "$deps_data" | yq -r ".groups.\"$deps_list_key\".packages | unique | .[]" 2>/dev/null || echo "")
 
         if [[ "$deps_list_key" == 'illogical-impulse' ]]; then
+            if [[ "$IS_AARCH64" == true ]]; then
+                # matugen has no aarch64 RPM (ii-package-builds is x86_64-only);
+                # it is installed from source by install-matugen-aarch64.sh.
+                log "Skipping group illogical-impulse on aarch64 — matugen is built from source (cargo)."
+                continue
+            fi
             install_opts="$install_opts --repofrompath=illogical-impulse,file://$HOME/.cache/illogical-impulse-repo --nogpgcheck"
+        fi
+
+        # On aarch64, filter out Hyprland-ecosystem packages that KDE doesn't need.
+        if [[ "$IS_AARCH64" == true ]]; then
+            local filtered=()
+            for pkg in $package_list; do
+                if [[ " ${AARCH64_SKIP_PKGS[*]} " == *" $pkg "* ]]; then
+                    echo "  [SKIP] $pkg — not needed on KDE Plasma (aarch64 build)"
+                    (( SKIPPED++ )) || true
+                else
+                    filtered+=("$pkg")
+                fi
+            done
+            package_list="${filtered[*]}"
         fi
 
         for pkg in $package_list; do

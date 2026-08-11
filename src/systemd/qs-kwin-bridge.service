@@ -1,0 +1,13 @@
+[Unit]
+Description=Quickshell-KDE bridge (KWin window state for the end-4 KDE shell)
+# After=plasma-kwin_wayland.service
+# After=plasma-plasmashell.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/qs-kwin-bridge.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -223,7 +223,9 @@
     "height": 60,
     "hoverRegionHeight": 2,
     "hoverToReveal": true,
-    "ignoredAppRegexes": [],
+    "ignoredAppRegexes": [
+      "^(quickshell|xwaylandvideobridge)$"
+    ],
     "monochromeIcons": true,
     "pinnedApps": [
       "org.kde.dolphin",

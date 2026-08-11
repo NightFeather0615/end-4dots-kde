@@ -1,9 +1,10 @@
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 import qs.modules.common
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
+import Quickshell.Io
 
 Singleton {
     id: root
@@ -20,7 +21,43 @@ Singleton {
         }
     }
 
-    property list<var> apps: {
+    // ── KWin window data (via qs-kwin-bridge) ─────────────────────────────────
+    // KWin does not implement wlr-foreign-toplevel / ext-foreign-toplevel-list,
+    // so Quickshell's ToplevelManager is empty on KDE. Instead we read the
+    // window list JSON written by the bridge service
+    // (KWin script → DBus → bridge.py → /tmp/qs_kwin_windows.json).
+    FileView {
+        id: windowsFile
+        path: "/tmp/qs_kwin_windows.json"
+        watchChanges: true
+        onFileChanged: windowsFile.reload()
+        onLoaded: root.rebuildApps()
+    }
+
+    // Control channel: writing a request here makes the bridge reload the KWin
+    // script, which pulls the action and activates/closes the window.
+    FileView {
+        id: controlFile
+        path: "/tmp/qs_kwin_control.json"
+    }
+
+    function requestWindowAction(action, internalId) {
+        controlFile.setText(JSON.stringify({ action: action, internalId: internalId }));
+    }
+
+    function makeToplevel(w) {
+        const appId = (w.class || "unknown").toLowerCase();
+        return {
+            appId: appId,
+            title: w.title || "",
+            internalId: w.internalId,
+            activated: w.activated === true,
+            activate: () => root.requestWindowAction("activate", w.internalId),
+            close: () => root.requestWindowAction("close", w.internalId)
+        };
+    }
+
+    function buildApps() {
         var map = new Map();
 
         // Pinned apps
@@ -40,14 +77,21 @@ Singleton {
         // Ignored apps
         const ignoredRegexStrings = Config.options?.dock.ignoredAppRegexes ?? [];
         const ignoredRegexes = ignoredRegexStrings.map(pattern => new RegExp(pattern, "i"));
-        // Open windows
-        for (const toplevel of ToplevelManager.toplevels.values) {
-            if (ignoredRegexes.some(re => re.test(toplevel.appId))) continue;
-            if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
-                pinned: false,
-                toplevels: []
-            }));
-            map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
+
+        // Open windows (from the bridge JSON)
+        var bridgeWindows = [];
+        if (windowsFile.loaded) {
+            try {
+                bridgeWindows = JSON.parse(windowsFile.text());
+            } catch (e) {
+                bridgeWindows = [];
+            }
+        }
+        for (const w of bridgeWindows) {
+            const appId = (w.class || "unknown").toLowerCase();
+            if (ignoredRegexes.some(re => re.test(appId))) continue;
+            if (!map.has(appId)) map.set(appId, { pinned: false, toplevels: [] });
+            map.get(appId).toplevels.push(root.makeToplevel(w));
         }
 
         var values = [];
@@ -57,6 +101,12 @@ Singleton {
         }
 
         return values;
+    }
+
+    property var apps: buildApps()
+
+    function rebuildApps() {
+        root.apps = root.buildApps();
     }
 
     component TaskbarAppEntry: QtObject {

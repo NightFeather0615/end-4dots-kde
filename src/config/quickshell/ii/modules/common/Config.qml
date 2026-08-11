@@ -164,6 +164,19 @@ Singleton {
                 }
             }
 
+            property JsonObject profile: JsonObject {
+                property string avatarPath: ""
+                property string avatarPicture: ""
+                property string descriptionText: "::distro::"
+                property string displayName: ""
+            }
+
+            property JsonObject settings: JsonObject {
+                property string style: "default" // default - minimal
+                property real borderSize: 1
+                property string borderColor: "layer0Border"
+            }
+
             property JsonObject apps: JsonObject {
                 property string bluetooth: "kcmshell6 kcm_bluetooth"
                 property string changePassword: "kitty -1 --hold=yes fish -i -c 'passwd'"
@@ -177,6 +190,10 @@ Singleton {
             }
 
             property JsonObject background: JsonObject {
+                property string lockWall: ""
+                property bool widgetsLocked: false
+                property bool showGrid: true
+                property bool showSnapLines: true
                 property JsonObject widgets: JsonObject {
                     property JsonObject clock: JsonObject {
                         property bool enable: true
@@ -185,6 +202,7 @@ Singleton {
                         property real x: 100
                         property real y: 100
                         property string style: "cookie"        // Options: "cookie", "digital"
+                        property string color: ""
                         property string styleLocked: "cookie"  // Options: "cookie", "digital"
                         property JsonObject cookie: JsonObject {
                             property bool aiStyling: false
@@ -216,6 +234,10 @@ Singleton {
                         property JsonObject quote: JsonObject {
                             property bool enable: false
                             property string text: ""
+                            property bool followClock: false
+                        }
+                        property JsonObject pixel: JsonObject {
+                            property string orientation: "vertical"
                         }
                     }
                     property JsonObject weather: JsonObject {
@@ -223,10 +245,84 @@ Singleton {
                         property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
                         property real x: 400
                         property real y: 100
+                        property string sizeMode: "1x3"
+                    }
+                    property JsonObject calendar: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 400
+                        property real y: 100
+                        property string sizeMode: "2x2"
+                    }
+                    property JsonObject worldClock: JsonObject {
+                        property bool enable: false
+                        property list<string> timezones: ["Australia/Sydney", "Asia/Tokyo", "Europe/London", "America/New_York"]
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                        property string sizeMode: "2x2"
+                    }
+                    property JsonObject notes: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                    }
+                    property JsonObject userCard: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                    }
+                    property JsonObject images: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                    }
+                    property JsonObject visualizer: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 0
+                        property real y: 0
+                    }
+                    property JsonObject customImage: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                        property string path: ""
+                        property string shape: "Cookie4Sided"
+                        property real size: 200
+                    }
+                    property JsonObject resources: JsonObject {
+                        property bool enable: false
+                        property string placementStrategy: "free"
+                        property real x: 400
+                        property real y: 100
+                        property bool vertical: false
+                    }
+                    property JsonObject media: JsonObject {
+                        property bool enable: false
+                        property bool showControls: true
+                        property bool showLyrics: false
+                        property bool showTitles: true
+                        property string backgroundShape: "Cookie4Sided"
+                        property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property real x: 800
+                        property real y: 500
                     }
                 }
+                property list<string> screenList: []
                 property string wallpaperPath: ""
                 property string thumbnailPath: ""
+                property bool centeredWallpaper: false
+                property string centeredWallpaperShape: "Cookie7Sided"
+                property int centeredWallpaperSize: 400
+                property string centeredWallpaperColor: "primaryContainer"
+                property bool centeredWallpaperOnlyWhenLocked: false
+                property string wallpaperAnimation: "magic"
+                property bool enableWallpaperPreview: false
                 property bool hideWhenFullscreen: true
                 property JsonObject parallax: JsonObject {
                     property bool vertical: false
@@ -239,6 +335,10 @@ Singleton {
             }
 
             property JsonObject bar: JsonObject {
+                property JsonObject divider: JsonObject {
+                    property string style: "dots" // "dots", "line"
+                    property int spacing: 4
+                }
                 property JsonObject autoHide: JsonObject {
                     property bool enable: false
                     property int hoverRegionWidth: 2
@@ -500,6 +600,8 @@ Singleton {
                     property string app: ">"
                     property string clipboard: ";"
                     property string emojis: ":"
+                    property string keybinds: "<"
+                    property string symbols: "."
                     property string math: "="
                     property string shellCommand: "$"
                     property string webSearch: "?"
@@ -511,7 +613,14 @@ Singleton {
             }
 
             property JsonObject sidebar: JsonObject {
+                property bool banner: true
+                property bool mediaPlayer: false
+                property string bannerImage: ""
                 property bool keepRightSidebarLoaded: true
+                property JsonObject media: JsonObject {
+                    property bool enable: true
+                    property bool artColors: false
+                }
                 property JsonObject translator: JsonObject {
                     property bool enable: false
                     property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
@@ -560,6 +669,11 @@ Singleton {
                     property bool showVolume: true
                     property bool showBrightness: true
                 }
+            }
+
+            property JsonObject custom: JsonObject {
+                property string distroIcon: ""
+                property bool colorizeIcon: true
             }
 
             property JsonObject screenRecord: JsonObject {

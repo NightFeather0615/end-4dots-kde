@@ -7,6 +7,5 @@
         "License": "MIT",
         "Category": "Window Management"
     },
-    "X-Plasma-API": "javascript",
-    "X-Plasma-MainScript": "code/main.js"
+    "KPackageStructure": "KWin/Script"
 }

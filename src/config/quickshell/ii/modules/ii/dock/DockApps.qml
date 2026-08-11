@@ -217,6 +217,30 @@ Item {
                                             }
                                         }
                                     }
+                                    // KWin does not implement any screencopy
+                                    // protocol (wlr/ext/hyprland), so the
+                                    // ScreencopyView can never produce content.
+                                    // Fall back to the app icon + title instead
+                                    // of showing a blank preview.
+                                    ColumnLayout {
+                                        anchors.centerIn: parent
+                                        spacing: 8
+                                        visible: !screencopyView.hasContent
+                                        IconImage {
+                                            Layout.alignment: Qt.AlignHCenter
+                                            implicitSize: 48
+                                            source: Quickshell.iconPath(AppSearch.guessIcon(windowButton.modelData?.appId ?? ""), "image-missing")
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignHCenter
+                                            Layout.maximumWidth: root.maxWindowPreviewWidth
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: windowButton.modelData?.title ?? ""
+                                            elide: Text.ElideRight
+                                            horizontalAlignment: Text.AlignHCenter
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                    }
                                 }
                             }
                         }
