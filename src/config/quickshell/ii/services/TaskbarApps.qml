@@ -59,6 +59,7 @@ Singleton {
 
     function buildApps() {
         var map = new Map();
+        var anyActive = false;
 
         // Pinned apps
         const pinnedApps = Config.options?.dock.pinnedApps ?? [];
@@ -90,9 +91,12 @@ Singleton {
         for (const w of bridgeWindows) {
             const appId = (w.class || "unknown").toLowerCase();
             if (ignoredRegexes.some(re => re.test(appId))) continue;
+            if (w.activated === true) anyActive = true;
             if (!map.has(appId)) map.set(appId, { pinned: false, toplevels: [] });
             map.get(appId).toplevels.push(root.makeToplevel(w));
         }
+
+        root.hasActiveToplevel = anyActive;
 
         var values = [];
 
@@ -104,6 +108,12 @@ Singleton {
     }
 
     property var apps: buildApps()
+
+    // True when at least one window in the bridge JSON is activated.
+    // Used by Dock.qml to decide whether the dock should auto-hide
+    // (KWin has no ToplevelManager, so the upstream Hyprland condition
+    // `!ToplevelManager.activeToplevel?.activated` is always true on KDE).
+    property bool hasActiveToplevel: false
 
     function rebuildApps() {
         root.apps = root.buildApps();

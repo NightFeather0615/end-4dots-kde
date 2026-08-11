@@ -27,7 +27,13 @@ Scope { // Scope
             screen: modelData
             visible: !GlobalStates.screenLocked
 
-            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || (!ToplevelManager.activeToplevel?.activated)
+            // Diagnostics: verify the dock window survives hot reloads
+            // (Quickshell reloads can drop layer-shell windows). Check with:
+            //   qs -c ii log -t 50 | grep -i dock
+            Component.onCompleted: console.info("[Dock] window created on", modelData?.name ?? "?")
+            Component.onDestruction: console.info("[Dock] window destroyed on", modelData?.name ?? "?")
+
+            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || !TaskbarApps.hasActiveToplevel
 
             anchors {
                 bottom: true
