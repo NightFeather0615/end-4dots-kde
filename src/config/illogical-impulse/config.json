@@ -203,7 +203,8 @@
         "systemIcons",
         "utilButtons",
         "sysTray",
-        "powerButton"
+        "powerButton",
+        "batteryIndicator"
       ]
     }
   },
