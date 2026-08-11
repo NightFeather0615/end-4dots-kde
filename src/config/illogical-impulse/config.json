@@ -21,13 +21,13 @@
     "extraBackgroundTint": true,
     "fakeScreenRounding": 2,
     "fonts": {
-      "expressive": "Space Grotesk",
+      "expressive": "Noto Sans",
       "iconNerd": "JetBrains Mono NF",
-      "main": "Google Sans Flex",
+      "main": "Noto Sans",
       "monospace": "JetBrains Mono NF",
-      "numbers": "Google Sans Flex",
-      "reading": "Readex Pro",
-      "title": "Google Sans Flex"
+      "numbers": "Noto Sans",
+      "reading": "Noto Sans",
+      "title": "Noto Sans"
     },
     "palette": {
       "accentColor": "",
