@@ -140,7 +140,7 @@
         "enable": true
       }
     },
-    "borderless": false,
+    "borderless": "",
     "bottom": true,
     "cornerStyle": 0,
     "floatStyleShadow": true,

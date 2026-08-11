@@ -349,13 +349,21 @@ Singleton {
                     }
                 }
                 property bool bottom: false // Instead of top
-                property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
+                property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle | 3: Material pill
                 property bool floatStyleShadow: true // Show shadow behind bar when cornerStyle == 1 (Float)
-                property bool borderless: false // true for no grouping of items
+                property string borderless: "" // "" = grouped | "transparent" | "segmented"
                 property string topLeftIcon: "spark" // Options: "distro" or any icon name in ~/.config/quickshell/ii/assets/icons
                 property bool showBackground: true
                 property bool verbose: true
                 property bool vertical: false
+                // Dynamic layout: which widgets appear on each side of the bar.
+                // Widget names map to <Name>.qml in modules/ii/bar/.
+                // Empty left/right layouts + cornerStyle != 3 = center-only pill.
+                property JsonObject layouts: JsonObject {
+                    property list<string> leftLayout: ["leftSidebarButton", "workspaces", "activeWindow"]
+                    property list<string> middleLayout: ["clockWidget"]
+                    property list<string> rightLayout: ["systemIcons", "utilButtons", "sysTray", "powerButton"]
+                }
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
                     property bool alwaysShowCpu: true
