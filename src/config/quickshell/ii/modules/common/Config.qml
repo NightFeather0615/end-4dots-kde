@@ -449,7 +449,10 @@ Singleton {
                 property bool enable: false
                 property bool monochromeIcons: true
                 property real height: 60
-                property real hoverRegionHeight: 2
+                // Height of the bottom-edge hover zone that summons the dock
+                // when hidden. Keep it generous: 2px is nearly impossible to
+                // hit on a trackpad. The zone is also full-width when hidden.
+                property real hoverRegionHeight: 8
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries

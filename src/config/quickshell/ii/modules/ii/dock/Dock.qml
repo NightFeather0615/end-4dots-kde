@@ -33,7 +33,7 @@ Scope { // Scope
             Component.onCompleted: console.info("[Dock] window created on", modelData?.name ?? "?")
             Component.onDestruction: console.info("[Dock] window destroyed on", modelData?.name ?? "?")
 
-            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) || dockApps.requestDockShow || !TaskbarApps.hasActiveToplevel
+            property bool reveal: root.pinned || (Config.options?.dock.hoverToReveal && (dockHoverArea.containsMouse || dockMouseArea.containsMouse)) || dockApps.requestDockShow || !TaskbarApps.hasActiveToplevel
 
             anchors {
                 bottom: true
@@ -50,7 +50,24 @@ Scope { // Scope
             implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
 
             mask: Region {
-                item: dockMouseArea
+                // Hidden: full-width bottom strip summons the dock.
+                // Shown: only the dock itself receives input.
+                item: dockRoot.reveal ? dockMouseArea : dockHoverArea
+            }
+
+            // Full-width bottom-edge hover zone. Only active while the dock is
+            // hidden (mask switches to dockMouseArea when revealed), so the
+            // dock can be summoned from anywhere along the bottom edge.
+            MouseArea {
+                id: dockHoverArea
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                }
+                height: Config.options?.dock.hoverRegionHeight ?? 8
+                hoverEnabled: true
+                visible: Config.options?.dock.hoverToReveal ?? true
             }
 
             MouseArea {
