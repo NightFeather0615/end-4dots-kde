@@ -231,7 +231,7 @@
       "org.kde.dolphin",
       "kitty"
     ],
-    "pinnedOnStartup": false
+    "pinnedOnStartup": true
   },
   "hacks": {
     "arbitraryRaceConditionDelay": 20
