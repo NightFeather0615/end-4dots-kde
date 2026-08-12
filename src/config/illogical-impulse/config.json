@@ -31,7 +31,7 @@
     },
     "palette": {
       "accentColor": "",
-      "type": "scheme-fidelity"
+      "type": "scheme-tonal-spot"
     },
     "transparency": {
       "automatic": true,
@@ -70,7 +70,14 @@
     }
   },
   "background": {
+    "centeredWallpaper": false,
+    "centeredWallpaperColor": "primaryContainer",
+    "centeredWallpaperOnlyWhenLocked": false,
+    "centeredWallpaperShape": "Cookie7Sided",
+    "centeredWallpaperSize": 400,
+    "enableWallpaperPreview": false,
     "hideWhenFullscreen": true,
+    "lockWall": "",
     "parallax": {
       "autoVertical": false,
       "enableSidebar": false,
@@ -79,10 +86,22 @@
       "widgetsFactor": 1.2,
       "workspaceZoom": 1.07
     },
+    "screenList": [],
+    "showGrid": true,
+    "showSnapLines": true,
     "thumbnailPath": "",
-    "wallpaperPath": "",
+    "wallpaperAnimation": "magic",
+    "wallpaperPath": "/home/nightfeather/Pictures/145300700_p0.png",
     "widgets": {
+      "calendar": {
+        "enable": false,
+        "placementStrategy": "free",
+        "sizeMode": "2x2",
+        "x": 400,
+        "y": 100
+      },
       "clock": {
+        "color": "",
         "cookie": {
           "aiStyling": false,
           "constantlyRotate": true,
@@ -111,9 +130,13 @@
           "vertical": false
         },
         "enable": true,
+        "pixel": {
+          "orientation": "vertical"
+        },
         "placementStrategy": "mostBusy",
         "quote": {
           "enable": false,
+          "followClock": false,
           "text": ""
         },
         "showOnlyWhenLocked": false,
@@ -122,17 +145,82 @@
         "x": 345,
         "y": 305
       },
-      "weather": {
+      "customImage": {
+        "enable": false,
+        "path": "",
+        "placementStrategy": "free",
+        "shape": "Cookie4Sided",
+        "size": 200,
+        "x": 400,
+        "y": 100
+      },
+      "images": {
         "enable": false,
         "placementStrategy": "free",
         "x": 400,
         "y": 100
+      },
+      "media": {
+        "backgroundShape": "Cookie4Sided",
+        "enable": false,
+        "placementStrategy": "free",
+        "showControls": true,
+        "showLyrics": false,
+        "showTitles": true,
+        "x": 800,
+        "y": 500
+      },
+      "notes": {
+        "enable": false,
+        "placementStrategy": "free",
+        "x": 400,
+        "y": 100
+      },
+      "resources": {
+        "enable": false,
+        "placementStrategy": "free",
+        "vertical": false,
+        "x": 400,
+        "y": 100
+      },
+      "userCard": {
+        "enable": false,
+        "placementStrategy": "free",
+        "x": 400,
+        "y": 100
+      },
+      "visualizer": {
+        "enable": false,
+        "placementStrategy": "free",
+        "x": 0,
+        "y": 0
+      },
+      "weather": {
+        "enable": false,
+        "placementStrategy": "free",
+        "sizeMode": "1x3",
+        "x": 400,
+        "y": 100
+      },
+      "worldClock": {
+        "enable": false,
+        "placementStrategy": "free",
+        "sizeMode": "2x2",
+        "timezones": [
+          "Australia/Sydney",
+          "Asia/Tokyo",
+          "Europe/London",
+          "America/New_York"
+        ],
+        "x": 400,
+        "y": 100
       }
-    }
+    },
+    "widgetsLocked": false
   },
   "bar": {
     "autoHide": {
-      "enable": false,
+      "enable": true,
       "hoverRegionWidth": 2,
       "pushWindows": false,
       "showWhenPressingSuper": {
@@ -143,11 +231,31 @@
     "borderless": "",
     "bottom": true,
     "cornerStyle": 0,
+    "divider": {
+      "spacing": 4,
+      "style": "dots"
+    },
     "floatStyleShadow": true,
     "indicators": {
       "notifications": {
         "showUnreadCount": false
       }
+    },
+    "layouts": {
+      "leftLayout": [
+        "weatherBar",
+        "media"
+      ],
+      "middleLayout": [
+        "docktoPanel"
+      ],
+      "rightLayout": [
+        "sysTray",
+        "batteryIndicator",
+        "clockWidget",
+        "systemIcons",
+        "powerButton"
+      ]
     },
     "resources": {
       "alwaysShowCpu": true,
@@ -163,13 +271,13 @@
     },
     "topLeftIcon": "spark",
     "utilButtons": {
-      "showColorPicker": true,
-      "showDarkModeToggle": true,
-      "showKeyboardToggle": true,
+      "showColorPicker": false,
+      "showDarkModeToggle": false,
+      "showKeyboardToggle": false,
       "showMicToggle": false,
       "showPerformanceProfileToggle": false,
       "showScreenRecord": false,
-      "showScreenSnip": true
+      "showScreenSnip": false
     },
     "verbose": true,
     "vertical": false,
@@ -182,30 +290,12 @@
     },
     "workspaces": {
       "alwaysShowNumbers": false,
-      "monochromeIcons": true,
+      "monochromeIcons": false,
       "numberMap": [],
       "showAppIcons": false,
       "showNumberDelay": 300,
       "shown": 10,
       "useNerdFont": false
-    },
-    "layouts": {
-      "leftLayout": [
-        "leftSidebarButton",
-        "docktoPanel",
-        "workspaces",
-        "activeWindow"
-      ],
-      "middleLayout": [
-        "clockWidget"
-      ],
-      "rightLayout": [
-        "systemIcons",
-        "utilButtons",
-        "sysTray",
-        "powerButton",
-        "batteryIndicator"
-      ]
     }
   },
   "battery": {
@@ -224,9 +314,9 @@
       "key": 14
     },
     "splitButtons": false,
-    "superKey": "",
+    "superKey": "⌘",
     "useFnSymbol": true,
-    "useMacSymbol": false,
+    "useMacSymbol": true,
     "useMouseSymbol": true
   },
   "conflictKiller": {
@@ -236,18 +326,21 @@
   "crosshair": {
     "code": "0;P;d;1;0l;10;0o;2;1b;0"
   },
+  "custom": {
+    "colorizeIcon": true,
+    "distroIcon": ""
+  },
   "dock": {
     "enable": false,
     "height": 60,
-    "hoverRegionHeight": 2,
+    "hoverRegionHeight": 8,
     "hoverToReveal": true,
     "ignoredAppRegexes": [
       "^(quickshell|xwaylandvideobridge)$"
     ],
-    "monochromeIcons": true,
+    "monochromeIcons": false,
     "pinnedApps": [
-      "org.kde.dolphin",
-      "kitty"
+      "org.kde.dolphin"
     ],
     "pinnedOnStartup": false
   },
@@ -354,6 +447,12 @@
     "ai": 1,
     "weeb": 1
   },
+  "profile": {
+    "avatarPath": "",
+    "avatarPicture": "",
+    "descriptionText": "::distro::",
+    "displayName": ""
+  },
   "regionSelector": {
     "annotation": {
       "useSatty": false
@@ -401,17 +500,26 @@
       "app": ">",
       "clipboard": ";",
       "emojis": ":",
+      "keybinds": "<",
       "math": "=",
       "shellCommand": "$",
       "showDefaultActionsWithoutPrefix": true,
+      "symbols": ".",
       "webSearch": "?"
     },
     "sloppy": false
+  },
+  "settings": {
+    "borderColor": "layer0Border",
+    "borderSize": 1,
+    "style": "default"
   },
   "sidebar": {
     "ai": {
       "textFadeIn": false
     },
+    "banner": true,
+    "bannerImage": "",
     "booru": {
       "allowNsfw": false,
       "defaultProvider": "yandere",
@@ -421,17 +529,22 @@
       }
     },
     "cornerOpen": {
-      "bottom": true,
-      "clickless": true,
+      "bottom": false,
+      "clickless": false,
       "clicklessCornerEnd": false,
       "clicklessCornerVerticalOffset": 0,
       "cornerRegionHeight": 5,
       "cornerRegionWidth": 250,
-      "enable": true,
+      "enable": false,
       "valueScroll": true,
       "visualize": false
     },
     "keepRightSidebarLoaded": true,
+    "media": {
+      "artColors": false,
+      "enable": true
+    },
+    "mediaPlayer": false,
     "quickSliders": {
       "enable": true,
       "showBrightness": true,
@@ -496,7 +609,7 @@
   "tray": {
     "filterPassive": true,
     "invertPinnedItems": true,
-    "monochromeIcons": true,
+    "monochromeIcons": false,
     "pinnedItems": [
       "Fcitx"
     ],
